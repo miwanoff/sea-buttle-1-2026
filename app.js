@@ -4,6 +4,8 @@ const gameBoardsContainer = document.querySelector("#game-boards");
 
 let angle = 0;
 
+const dim = 10;
+
 function rotate() {
   // const optionShips = gameOptionContainer.children;
   //   for (const ship of optionShips) {
@@ -20,14 +22,19 @@ function rotate() {
 
 rotateButton.addEventListener("click", rotate);
 
-  function createBoаrd(color, user) {
+function createBoаrd(color, user) {
   const gameBoardContainer = document.createElement("div");
   gameBoardContainer.classList.add("game-board");
   gameBoardContainer.style.background = color;
   gameBoardContainer.id = user;
   gameBoardsContainer.append(gameBoardContainer);
+  for (let i = 0; i < dim * dim; i++) {
+    const block = document.createElement("div");
+    block.classList.add("block");
+    block.id = `block-${i}`;
+    gameBoardContainer.append(block);
+  }
 }
-
 
 createBoаrd("tan", "user");
 createBoаrd("pink", "computer");
