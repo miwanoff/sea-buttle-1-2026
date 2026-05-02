@@ -1,0 +1,54 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+
+h1 {
+  color: #1022ee;
+  text-align: center;
+}
+
+
+.container {
+  margin-left: 20px;
+}
+
+
+#game-option {
+  display: flex;
+  width: 500px;
+  height: 100px;
+  background-color: gold;
+  padding: 20px;
+  margin: 20px;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.ship {
+  display: flex;
+}
+
+
+.deck {
+  width: 20px;
+  height: 20px;
+}
+
+
+.deck-one {
+  background-color: #ed1a1a;
+}
+
+
+.deck-three {
+  background-color: #72ed1a;
+}
