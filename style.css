@@ -32,9 +32,29 @@ h1 {
   gap: 10px;
 }
 
+#game-boards{
+    width: 500px;
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+
+.game-board {
+  width: 200px;
+  height: 200px;
+}
+
+
 
 .ship {
   display: flex;
+}
+
+.btn {
+    display: block;
+    padding: 2px;
+    margin: 4px;
 }
 
 

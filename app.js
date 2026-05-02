@@ -1,5 +1,7 @@
 const gameOptionContainer = document.querySelector("#game-option");
 const rotateButton = document.querySelector("#rotate");
+const gameBoardsContainer = document.querySelector("#game-boards");
+
 let angle = 0;
 
 function rotate() {
@@ -17,3 +19,15 @@ function rotate() {
 }
 
 rotateButton.addEventListener("click", rotate);
+
+  function createBoаrd(color, user) {
+  const gameBoardContainer = document.createElement("div");
+  gameBoardContainer.classList.add("game-board");
+  gameBoardContainer.style.background = color;
+  gameBoardContainer.id = user;
+  gameBoardsContainer.append(gameBoardContainer);
+}
+
+
+createBoаrd("tan", "user");
+createBoаrd("pink", "computer");
