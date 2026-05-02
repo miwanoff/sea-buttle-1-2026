@@ -4,7 +4,21 @@ const gameBoardsContainer = document.querySelector("#game-boards");
 
 let angle = 0;
 
-const dim = 10;
+const width = 10;
+
+class Ship {
+  constructor(name, length) {
+    this.name = name;
+    this.length = length;
+  }
+}
+
+const ship1 = new Ship("deck-one", 1);
+const ship2 = new Ship("deck-one", 1);
+const ship3 = new Ship("deck-three", 3);
+const ship4 = new Ship("deck-three", 3);
+
+const ships = [ship1, ship2, ship3, ship4];
 
 function rotate() {
   // const optionShips = gameOptionContainer.children;
@@ -28,13 +42,32 @@ function createBoаrd(color, user) {
   gameBoardContainer.style.background = color;
   gameBoardContainer.id = user;
   gameBoardsContainer.append(gameBoardContainer);
-  for (let i = 0; i < dim * dim; i++) {
+  for (let i = 0; i < width * width; i++) {
     const block = document.createElement("div");
     block.classList.add("block");
-    block.id = `block-${i}`;
+    block.id = `block-${user}-${i}`;
     gameBoardContainer.append(block);
   }
 }
 
 createBoаrd("tan", "user");
 createBoаrd("pink", "computer");
+
+function generate(ship) {
+  const computerElement = document.querySelector("#computer");
+  console.log(computerElement);
+  const allBoardBlocks = computerElement.getElementsByClassName("block");
+  console.log(allBoardBlocks);
+  // let randomBoolean = Math.random < 0.5;
+  isHorisontal = true;
+  let randomStartIndex = Math.floor(Math.random() * width * width);
+  let shipBlocks = [];
+  for (let i = 0; i < ship.length; i++) {
+    if (isHorisontal) {
+      console.log(allBoardBlocks[Number(randomStartIndex) + i * width]);
+      shipBlocks.push(allBoardBlocks[Number(randomStartIndex) + i * width]);
+    }
+  }
+}
+
+generate(ship4);
