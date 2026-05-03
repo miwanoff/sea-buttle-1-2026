@@ -71,23 +71,39 @@ function generate(ship) {
     : randomStartIndex <= width * width - width * ship.length
       ? randomStartIndex
       : randomStartIndex - width * ship.length + width;
-  let shipBlocks = [];
+
+  let temp = [];
   for (let i = 0; i < ship.length; i++) {
-    if (isHorisontal) {
-     // console.log(allBoardBlocks[Number(validStart) + i]);
-      shipBlocks.push(allBoardBlocks[Number(validStart) + i]);
-      takenBlocks.push(Number(validStart) + i);
-    } else {
-     // console.log(allBoardBlocks[Number(validStart) + i * width]);
-      shipBlocks.push(allBoardBlocks[Number(validStart) + i * width]);
-      takenBlocks.push(Number(validStart) + i * width);
-    }
+    isHorisontal
+      ? temp.push(Number(validStart) + i)
+      : temp.push(Number(validStart) + i * width);
   }
-  console.log(takenBlocks);
-  shipBlocks.forEach((shipBlock) => {
-    shipBlock.classList.add(ship.name);
-    shipBlock.classList.add("taken");
+
+  const wrongPosition = temp.some((element) => {
+    return takenBlocks.includes(element);
   });
+
+  if (!wrongPosition) {
+    let shipBlocks = [];
+    for (let i = 0; i < ship.length; i++) {
+      if (isHorisontal) {
+        // console.log(allBoardBlocks[Number(validStart) + i]);
+        shipBlocks.push(allBoardBlocks[Number(validStart) + i]);
+        takenBlocks.push(Number(validStart) + i);
+      } else {
+        // console.log(allBoardBlocks[Number(validStart) + i * width]);
+        shipBlocks.push(allBoardBlocks[Number(validStart) + i * width]);
+        takenBlocks.push(Number(validStart) + i * width);
+      }
+    }
+    console.log(takenBlocks);
+    shipBlocks.forEach((shipBlock) => {
+      shipBlock.classList.add(ship.name);
+      shipBlock.classList.add("taken");
+    });
+  } else {
+    generate(ship);
+  }
 }
 
 //generate(ship4);
