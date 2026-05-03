@@ -73,6 +73,11 @@ function generate(ship) {
       shipBlocks.push(allBoardBlocks[Number(randomStartIndex) + i * width]);
     }
   }
+    shipBlocks.forEach((shipBlock) => {
+    shipBlock.classList.add(ship.name);
+    //shipBlock.classList.add("taken");
+  });
+
 }
 
 //generate(ship4);
