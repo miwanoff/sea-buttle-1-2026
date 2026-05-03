@@ -2,9 +2,12 @@ const gameOptionContainer = document.querySelector("#game-option");
 const rotateButton = document.querySelector("#rotate");
 const gameBoardsContainer = document.querySelector("#game-boards");
 
+let draggedShip;
 let angle = 0;
-
 const width = 10;
+let isHorisontal = true;
+
+let notDropped;
 
 let takenBlocks = [];
 
@@ -55,56 +58,141 @@ function createBoаrd(color, user) {
 createBoаrd("tan", "user");
 createBoаrd("pink", "computer");
 
-function generate(ship) {
-  const computerElement = document.querySelector("#computer");
-  //console.log(computerElement);
-  const allBoardBlocks = computerElement.getElementsByClassName("block");
-  //console.log(allBoardBlocks);
-  let randomBoolean = Math.random() < 0.5;
-  isHorisontal = randomBoolean;
-  console.log(isHorisontal);
-  let randomStartIndex = Math.floor(Math.random() * width * width);
+function getValidity(allBoardBlocks, isHorisontal, startIndex, ship) {
   let validStart = isHorisontal
-    ? randomStartIndex <= width * width - ship.length
-      ? randomStartIndex
+    ? startIndex <= width * width - ship.length
+      ? startIndex
       : width * width - ship.length
-    : randomStartIndex <= width * width - width * ship.length
-      ? randomStartIndex
-      : randomStartIndex - width * ship.length + width;
+    : startIndex <= width * width - width * ship.length
+      ? startIndex
+      : width * width - width * ship.length;
+  console.log(validStart, isHorisontal);
+  let shipBlocks = [];
 
-  let temp = [];
   for (let i = 0; i < ship.length; i++) {
-    isHorisontal
-      ? temp.push(Number(validStart) + i)
-      : temp.push(Number(validStart) + i * width);
+    if (isHorisontal) {
+      //console.log(allBoardBlocks[randomStartIndex + i]);
+      shipBlocks.push(allBoardBlocks[Number(validStart) + i]);
+    } else {
+      //console.log(allBoardBlocks[Number(randomStartIndex) + i * width]);
+      shipBlocks.push(allBoardBlocks[Number(validStart) + i * width]);
+    }
   }
 
-  const wrongPosition = temp.some((element) => {
-    return takenBlocks.includes(element);
-  });
+  const notTaken = shipBlocks.every(
+    (shipBlocks) => !shipBlocks.classList.contains("taken"),
+  );
 
-  if (!wrongPosition) {
-    let shipBlocks = [];
-    for (let i = 0; i < ship.length; i++) {
-      if (isHorisontal) {
-        // console.log(allBoardBlocks[Number(validStart) + i]);
-        shipBlocks.push(allBoardBlocks[Number(validStart) + i]);
-        takenBlocks.push(Number(validStart) + i);
-      } else {
-        // console.log(allBoardBlocks[Number(validStart) + i * width]);
-        shipBlocks.push(allBoardBlocks[Number(validStart) + i * width]);
-        takenBlocks.push(Number(validStart) + i * width);
-      }
-    }
-    console.log(takenBlocks);
+  return { shipBlocks, notTaken };
+}
+
+function generate(user, ship, startId) {
+  //   const computerElement = document.querySelector("#computer");
+  //   const allBoardBlocks = computerElement.getElementsByClassName("block");
+  const allBoardBlocks = document.querySelectorAll(`#${user} div`);
+  //console.log(allBoardBlocks);
+  let randomBoolean = Math.random() < 0.5;
+  isHorisontal = user === "user" ? angle === 0 : randomBoolean;
+//   isHorisontal = randomBoolean;
+
+  console.log("ship ", ship.name);
+  console.log("isHorisontal ", isHorisontal);
+
+  let randomStartIndex = Math.floor(Math.random() * width * width);
+  let startIndex = startId ? startId.substr(11) : randomStartIndex;
+  // console.log("startIndex " + startIndex);
+
+  //   let validStart = isHorisontal
+  //     ? randomStartIndex <= width * width - ship.length
+  //       ? randomStartIndex
+  //       : width * width - ship.length
+  //     : randomStartIndex <= width * width - width * ship.length
+  //       ? randomStartIndex
+  //       : randomStartIndex - width * ship.length + width;
+  //   let validStart = isHorisontal
+  //     ? startIndex <= width * width - ship.length
+  //       ? startIndex
+  //       : width * width - ship.length
+  //     : startIndex <= width * width - width * ship.length
+  //       ? startIndex
+  //       : width * width - width * ship.length;
+
+  //   let temp = [];
+  //   for (let i = 0; i < ship.length; i++) {
+  //     isHorisontal
+  //       ? temp.push(Number(validStart) + i)
+  //       : temp.push(Number(validStart) + i * width);
+  //   }
+
+  //   const wrongPosition = temp.some((element) => {
+  //     return takenBlocks.includes(element);
+  //   });
+
+  //   if (!wrongPosition) {
+  //     let shipBlocks = [];
+  //     for (let i = 0; i < ship.length; i++) {
+  //       if (isHorisontal) {
+  //         // console.log(allBoardBlocks[Number(validStart) + i]);
+  //         shipBlocks.push(allBoardBlocks[Number(validStart) + i]);
+  //         takenBlocks.push(Number(validStart) + i);
+  //       } else {
+  //         // console.log(allBoardBlocks[Number(validStart) + i * width]);
+  //         shipBlocks.push(allBoardBlocks[Number(validStart) + i * width]);
+  //         takenBlocks.push(Number(validStart) + i * width);
+  //       }
+  //     }
+  //console.log(takenBlocks);
+
+  const { shipBlocks, notTaken } = getValidity(
+    allBoardBlocks,
+    isHorisontal,
+    startIndex,
+    ship,
+  );
+
+  if (notTaken) {
     shipBlocks.forEach((shipBlock) => {
       shipBlock.classList.add(ship.name);
       shipBlock.classList.add("taken");
     });
   } else {
-    generate(ship);
+    if (user === "computer") generate(user, ship);
+    if (user === "user") notDropped = true;
   }
 }
 
 //generate(ship4);
-ships.forEach((ship) => generate(ship));
+ships.forEach((ship) => generate("computer", ship));
+
+const optionShips = Array.from(gameOptionContainer.children);
+
+optionShips.forEach((optionShip) =>
+  optionShip.addEventListener("dragstart", dragStart),
+);
+
+const allUserBlocks = document.querySelectorAll("#user div");
+allUserBlocks.forEach((userBlock) => {
+  userBlock.addEventListener("dragover", dragOver);
+  userBlock.addEventListener("drop", dropShip);
+});
+
+function dragStart(event) {
+  draggedShip = event.target;
+  notDropped = false;
+}
+
+function dragOver(event) {
+  event.preventDefault();
+}
+
+function dropShip(event) {
+  const startID = event.target.id;
+  console.log(startID);
+  // console.log(draggedShip.id.substr(5));
+  const ship = ships[draggedShip.id.substr(5)];
+  // console.log(ship);
+  generate("user", ship, startID);
+  if (!notDropped) {
+    draggedShip.remove();
+  }
+}
