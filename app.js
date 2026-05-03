@@ -55,19 +55,25 @@ createBoаrd("pink", "computer");
 
 function generate(ship) {
   const computerElement = document.querySelector("#computer");
-  console.log(computerElement);
+  //console.log(computerElement);
   const allBoardBlocks = computerElement.getElementsByClassName("block");
-  console.log(allBoardBlocks);
-  // let randomBoolean = Math.random < 0.5;
-  isHorisontal = true;
+  //console.log(allBoardBlocks);
+  let randomBoolean = Math.random() < 0.5;
+  isHorisontal = randomBoolean;
+  console.log(isHorisontal)
   let randomStartIndex = Math.floor(Math.random() * width * width);
   let shipBlocks = [];
   for (let i = 0; i < ship.length; i++) {
     if (isHorisontal) {
+      console.log(allBoardBlocks[Number(randomStartIndex) + i]);
+      shipBlocks.push(allBoardBlocks[Number(randomStartIndex) + i]);
+    }
+    else {
       console.log(allBoardBlocks[Number(randomStartIndex) + i * width]);
       shipBlocks.push(allBoardBlocks[Number(randomStartIndex) + i * width]);
     }
   }
 }
 
-generate(ship4);
+//generate(ship4);
+ships.forEach((ship) => generate(ship));
