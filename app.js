@@ -6,6 +6,8 @@ let angle = 0;
 
 const width = 10;
 
+let takenBlocks = [];
+
 class Ship {
   constructor(name, length) {
     this.name = name;
@@ -60,31 +62,32 @@ function generate(ship) {
   //console.log(allBoardBlocks);
   let randomBoolean = Math.random() < 0.5;
   isHorisontal = randomBoolean;
-  console.log(isHorisontal)
+  console.log(isHorisontal);
   let randomStartIndex = Math.floor(Math.random() * width * width);
   let validStart = isHorisontal
     ? randomStartIndex <= width * width - ship.length
       ? randomStartIndex
       : width * width - ship.length
     : randomStartIndex <= width * width - width * ship.length
-    ? randomStartIndex
-    : randomStartIndex - width * ship.length + width;
+      ? randomStartIndex
+      : randomStartIndex - width * ship.length + width;
   let shipBlocks = [];
   for (let i = 0; i < ship.length; i++) {
     if (isHorisontal) {
-      console.log(allBoardBlocks[Number(validStart) + i]);
+     // console.log(allBoardBlocks[Number(validStart) + i]);
       shipBlocks.push(allBoardBlocks[Number(validStart) + i]);
-    }
-    else {
-      console.log(allBoardBlocks[Number(validStart) + i * width]);
+      takenBlocks.push(Number(validStart) + i);
+    } else {
+     // console.log(allBoardBlocks[Number(validStart) + i * width]);
       shipBlocks.push(allBoardBlocks[Number(validStart) + i * width]);
+      takenBlocks.push(Number(validStart) + i * width);
     }
   }
-    shipBlocks.forEach((shipBlock) => {
+  console.log(takenBlocks);
+  shipBlocks.forEach((shipBlock) => {
     shipBlock.classList.add(ship.name);
-    //shipBlock.classList.add("taken");
+    shipBlock.classList.add("taken");
   });
-
 }
 
 //generate(ship4);
