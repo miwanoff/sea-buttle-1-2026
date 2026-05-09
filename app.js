@@ -248,13 +248,31 @@ function computerGo() {
       ) {
         allBoardsBlocks[rand].classList.add("boom");
         info.textContent = "Computer hit your ship!";
-      }
-      else {
+        let classes = Array.from(allBoardsBlocks[rand].classList);
+        classes = classes.filter(
+          (className) =>
+            className !== "block" &&
+            className !== "boom" &&
+            className !== "taken",
+        );
+        computerHits.push(...classes);
+        console.log(computerHits);
+      } else {
         info.textContent = "Nothing hit";
         allBoardsBlocks[rand].classList.add("empty");
       }
+    }, 3000);
 
-    });
+     setTimeout(() => {
+      playerTurn = true;
+      turn.textContent = "Your turn!";
+      info.textContent = "Your Go!";
+      const allBoardBlocks = document.querySelectorAll("#computer div");
+      allBoardBlocks.forEach((block) =>
+        block.addEventListener("click", handleClick)
+      );
+    }, 6000);
+
   }
 }
 
@@ -288,6 +306,7 @@ function startGame() {
     info.innerHTML = "Place all your ships!";
   } else {
     info.innerHTML = "The Game`s begin!";
+    turn.innerHTML = "Your Turn!"
     const allBoardBlocks = document.querySelectorAll("#computer div");
     allBoardBlocks.forEach((block) =>
       block.addEventListener("click", handleClick),
