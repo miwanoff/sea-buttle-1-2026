@@ -231,7 +231,12 @@ function handleClick(event) {
       event.target.classList.add("boom");
       info.innerHTML = "You hit computers ship!";
     }
+    else {
+      event.target.classList.add("empty");
+      info.innerHTML = "Nothing hit!";
+    }
 }
+
 
 function startGame() {
   if (gameOptionContainer.children.length != 0) {
