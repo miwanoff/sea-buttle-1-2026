@@ -66,7 +66,7 @@ function getValidity(allBoardBlocks, isHorisontal, startIndex, ship) {
     : startIndex <= width * width - width * ship.length
       ? startIndex
       : width * width - width * ship.length;
-  console.log(validStart, isHorisontal);
+  // console.log(validStart, isHorisontal);
   let shipBlocks = [];
 
   for (let i = 0; i < ship.length; i++) {
@@ -93,10 +93,10 @@ function generate(user, ship, startId) {
   //console.log(allBoardBlocks);
   let randomBoolean = Math.random() < 0.5;
   isHorisontal = user === "user" ? angle === 0 : randomBoolean;
-//   isHorisontal = randomBoolean;
+  //   isHorisontal = randomBoolean;
 
-  console.log("ship ", ship.name);
-  console.log("isHorisontal ", isHorisontal);
+  //console.log("ship ", ship.name);
+  //console.log("isHorisontal ", isHorisontal);
 
   let randomStartIndex = Math.floor(Math.random() * width * width);
   let startIndex = startId ? startId.substr(11) : randomStartIndex;
@@ -181,13 +181,34 @@ function dragStart(event) {
   notDropped = false;
 }
 
+function highlight(startIndex, ship) {
+  const allBoardBlocks = document.querySelectorAll("#user div");
+  let isHorisontal = angle === 0;
+  const { shipBlocks, notTaken } = getValidity(
+    allBoardBlocks,
+    isHorisontal,
+    startIndex,
+    ship,
+  );
+  if (notTaken) {
+    shipBlocks.forEach((shipBlock) => {
+      shipBlock.classList.add("hover");
+      setTimeout(() => shipBlock.classList.remove("hover"), 500);
+    });
+  }
+}
+
 function dragOver(event) {
   event.preventDefault();
+  const ship = ships[draggedShip.id.substr(5)];
+   console.log("draggedShip.id:", draggedShip.id, draggedShip.id.substr(5));
+  console.log("event.target.id:", event.target.id, event.target.id.substr(11));
+  highlight(event.target.id.substr(11), ship);
 }
 
 function dropShip(event) {
   const startID = event.target.id;
-  console.log(startID);
+  //console.log(startID);
   // console.log(draggedShip.id.substr(5));
   const ship = ships[draggedShip.id.substr(5)];
   // console.log(ship);
