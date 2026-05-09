@@ -2,6 +2,10 @@ const gameOptionContainer = document.querySelector("#game-option");
 const rotateButton = document.querySelector("#rotate");
 const gameBoardsContainer = document.querySelector("#game-boards");
 
+const startButton = document.querySelector("#start");
+const turn = document.querySelector("#turn");
+const info = document.querySelector("#info");
+
 let draggedShip;
 let angle = 0;
 const width = 10;
@@ -10,6 +14,9 @@ let isHorisontal = true;
 let notDropped;
 
 let takenBlocks = [];
+
+let gameOver = false;
+let playerTurn = true;
 
 class Ship {
   constructor(name, length) {
@@ -201,7 +208,7 @@ function highlight(startIndex, ship) {
 function dragOver(event) {
   event.preventDefault();
   const ship = ships[draggedShip.id.substr(5)];
-   console.log("draggedShip.id:", draggedShip.id, draggedShip.id.substr(5));
+  console.log("draggedShip.id:", draggedShip.id, draggedShip.id.substr(5));
   console.log("event.target.id:", event.target.id, event.target.id.substr(11));
   highlight(event.target.id.substr(11), ship);
 }
@@ -217,3 +224,25 @@ function dropShip(event) {
     draggedShip.remove();
   }
 }
+
+function handleClick(event) {
+  if (!gameOver)
+    if (event.target.classList.contains("taken")) {
+      event.target.classList.add("boom");
+      info.innerHTML = "You hit computers ship!";
+    }
+}
+
+function startGame() {
+  if (gameOptionContainer.children.length != 0) {
+    info.innerHTML = "Place all your ships!";
+  } else {
+    info.innerHTML = "The Game`s begin!";
+    const allBoardBlocks = document.querySelectorAll("#computer div");
+    allBoardBlocks.forEach((block) =>
+      block.addEventListener("click", handleClick),
+    );
+  }
+}
+
+startButton.addEventListener("click", startGame);
