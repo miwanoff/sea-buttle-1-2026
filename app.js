@@ -15,7 +15,7 @@ let notDropped;
 
 let takenBlocks = [];
 let userHits = [];
-let computerHits = []
+let computerHits = [];
 
 let gameOver = false;
 let playerTurn = true;
@@ -227,25 +227,61 @@ function dropShip(event) {
   }
 }
 
+function computerGo() {
+  if (!gameOver) {
+    turn.textContent = "Computers Go!";
+    info.textContent = "Computers is thinking...";
+
+    setTimeout(() => {
+      let rand = Math.floor(Math.random() * width * width);
+      const allBoardsBlocks = document.querySelectorAll("#user div");
+
+      if (
+        allBoardsBlocks[rand].classList.contains("taken") &&
+        allBoardsBlocks[rand].classList.contains("boom")
+      ) {
+        computerGo();
+        return;
+      } else if (
+        allBoardsBlocks[rand].classList.contains("taken") &&
+        !allBoardsBlocks[rand].classList.contains("boom")
+      ) {
+        allBoardsBlocks[rand].classList.add("boom");
+        info.textContent = "Computer hit your ship!";
+      }
+      else {
+        info.textContent = "Nothing hit";
+        allBoardsBlocks[rand].classList.add("empty");
+      }
+
+    });
+  }
+}
+
 function handleClick(event) {
-  if (!gameOver)
+  if (!gameOver) {
     if (event.target.classList.contains("taken")) {
       event.target.classList.add("boom");
       info.innerHTML = "You hit computers ship!";
       let classes = Array.from(event.target.classList);
       classes = classes.filter(
         (className) =>
-          className !== "block" && className !== "boom" && className !== "taken"
+          className !== "block" &&
+          className !== "boom" &&
+          className !== "taken",
       );
-      userHits.push (...classes);
-      console.log(userHits);
-    }
-    else {
+      userHits.push(...classes);
+      //console.log(userHits);
+    } else {
       event.target.classList.add("empty");
       info.innerHTML = "Nothing hit!";
     }
+    playerTurn = false;
+    const allBoardBlocks = document.querySelectorAll("#computer div");
+    allBoardBlocks.forEach((block) => block.replaceWith(block.cloneNode(true)));
+    setTimeout(computerGo, 2000);
+  }
 }
-
 
 function startGame() {
   if (gameOptionContainer.children.length != 0) {
