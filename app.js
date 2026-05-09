@@ -14,6 +14,8 @@ let isHorisontal = true;
 let notDropped;
 
 let takenBlocks = [];
+let userHits = [];
+let computerHits = []
 
 let gameOver = false;
 let playerTurn = true;
@@ -208,8 +210,8 @@ function highlight(startIndex, ship) {
 function dragOver(event) {
   event.preventDefault();
   const ship = ships[draggedShip.id.substr(5)];
-  console.log("draggedShip.id:", draggedShip.id, draggedShip.id.substr(5));
-  console.log("event.target.id:", event.target.id, event.target.id.substr(11));
+  //console.log("draggedShip.id:", draggedShip.id, draggedShip.id.substr(5));
+  //console.log("event.target.id:", event.target.id, event.target.id.substr(11));
   highlight(event.target.id.substr(11), ship);
 }
 
@@ -230,6 +232,13 @@ function handleClick(event) {
     if (event.target.classList.contains("taken")) {
       event.target.classList.add("boom");
       info.innerHTML = "You hit computers ship!";
+      let classes = Array.from(event.target.classList);
+      classes = classes.filter(
+        (className) =>
+          className !== "block" && className !== "boom" && className !== "taken"
+      );
+      userHits.push (...classes);
+      console.log(userHits);
     }
     else {
       event.target.classList.add("empty");
