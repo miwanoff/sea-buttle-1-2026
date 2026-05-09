@@ -83,3 +83,13 @@ h1 {
 .hover {
   background-color: gold;
 }
+
+.empty {
+  background-color: rgb(255, 255, 255);
+}
+
+
+.boom {
+  background-image: url(./images/Cross.png)  !important;
+  background-size: contain;
+}
