@@ -308,7 +308,7 @@ function startGame() {
   if (gameOptionContainer.children.length != 0) {
     info.innerHTML = "Place all your ships!";
   } else {
-    info.innerHTML = "The Game`s begin!";
+    info.innerHTML = "The Game`s started!";
     turn.innerHTML = "Your Turn!";
     const allBoardBlocks = document.querySelectorAll("#computer div");
     allBoardBlocks.forEach((block) =>
